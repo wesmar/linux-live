@@ -1,0 +1,8 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="LinuxLive.vcxproj" Id="080708f8-9c50-497a-9cae-a869faf42483" />
+</Solution>

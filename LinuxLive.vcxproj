@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Linux Live - x64 project. build.ps1 builds it with the newest MSVC and Windows SDK found on disk. -->
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64"><Configuration>Debug</Configuration><Platform>x64</Platform></ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64"><Configuration>Release</Configuration><Platform>x64</Platform></ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <ProjectGuid>{080708F8-9C50-497A-9CAE-A869FAF42483}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>LinuxLive</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup>
+    <OutDir>$(ProjectDir)bin\</OutDir>
+    <IntDir>$(ProjectDir)obj\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>LinuxLive</TargetName>
+    <LinkIncremental>false</LinkIncremental>
+    <!-- The manifest comes from app.rc (RT_MANIFEST 1); the linker must not add a second one. -->
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <TargetName>LinuxLive_debug</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NOMINMAX;WIN32_LEAN_AND_MEAN;UNICODE;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/utf-8 /Brepro /Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\resources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <CETCompat>true</CETCompat>
+      <AdditionalOptions>/Brepro %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\app\Cli.cpp" />
+    <ClCompile Include="src\app\Console.cpp" />
+    <ClCompile Include="src\app\main.cpp" />
+    <ClCompile Include="src\core\Actions.cpp" />
+    <ClCompile Include="src\core\BootList.cpp" />
+    <ClCompile Include="src\core\Deploy.cpp" />
+    <ClCompile Include="src\core\Sources.cpp" />
+    <ClCompile Include="src\efi\Bcd.cpp" />
+    <ClCompile Include="src\efi\Efi.cpp" />
+    <ClCompile Include="src\gui\Dialogs.cpp" />
+    <ClCompile Include="src\gui\MainWindow.cpp" />
+    <ClCompile Include="src\gui\MainWindowCommands.cpp" />
+    <ClCompile Include="src\gui\MainWindowLayout.cpp" />
+    <ClCompile Include="src\gui\MainWindowMenus.cpp" />
+    <ClCompile Include="src\gui\MainWindowState.cpp" />
+    <ClCompile Include="src\gui\Menus.cpp" />
+    <ClCompile Include="src\gui\Theme.cpp" />
+    <ClCompile Include="src\gui\Widgets.cpp" />
+    <ClCompile Include="src\install\EspInstaller.cpp" />
+    <ClCompile Include="src\install\Layout.cpp" />
+    <ClCompile Include="src\net\Downloader.cpp" />
+    <ClCompile Include="src\storage\BitLocker.cpp" />
+    <ClCompile Include="src\storage\BootPartition.cpp" />
+    <ClCompile Include="src\storage\Volumes.cpp" />
+    <ClCompile Include="src\support\Common.cpp" />
+    <ClCompile Include="src\support\Settings.cpp" />
+    <ClCompile Include="src\support\Sha256.cpp" />
+    <ClCompile Include="src\support\Text.cpp" />
+    <ClCompile Include="src\support\Wmi.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\app\Cli.h" />
+    <ClInclude Include="src\app\Console.h" />
+    <ClInclude Include="src\core\Actions.h" />
+    <ClInclude Include="src\core\BootList.h" />
+    <ClInclude Include="src\core\Deploy.h" />
+    <ClInclude Include="src\core\Sources.h" />
+    <ClInclude Include="src\efi\Bcd.h" />
+    <ClInclude Include="src\efi\Efi.h" />
+    <ClInclude Include="src\gui\Dialogs.h" />
+    <ClInclude Include="src\gui\MainWindow.h" />
+    <ClInclude Include="src\gui\MainWindowDetail.h" />
+    <ClInclude Include="src\gui\Menus.h" />
+    <ClInclude Include="src\gui\Theme.h" />
+    <ClInclude Include="src\gui\Widgets.h" />
+    <ClInclude Include="src\install\EspInstaller.h" />
+    <ClInclude Include="src\install\Layout.h" />
+    <ClInclude Include="src\net\Downloader.h" />
+    <ClInclude Include="src\resources\resource.h" />
+    <ClInclude Include="src\storage\BitLocker.h" />
+    <ClInclude Include="src\storage\BootPartition.h" />
+    <ClInclude Include="src\storage\Volumes.h" />
+    <ClInclude Include="src\support\Common.h" />
+    <ClInclude Include="src\support\Config.h" />
+    <ClInclude Include="src\support\Handle.h" />
+    <ClInclude Include="src\support\Settings.h" />
+    <ClInclude Include="src\support\Sha256.h" />
+    <ClInclude Include="src\support\Text.h" />
+    <ClInclude Include="src\support\Wmi.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\resources\app.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\resources\lang\en.rc" />
+    <None Include="src\resources\app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="src\resources\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Language files are not compiled in: they are copied next to the executable (bin\language). -->
+    <CopyFileToFolders Include="src\resources\language\ar.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\de.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\es.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\fr.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\it.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\ja.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\pl.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\ru.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\zh-cn.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

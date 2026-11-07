@@ -1,0 +1,17 @@
+# Build output (build.ps1 / Visual Studio)
+bin/
+obj/
+.vs/
+*.vcxproj.user
+*.aps
+
+# Large deployment artifacts - published as release assets, never committed
+*.tar
+*.squashfs
+*.sha256
+
+# Local release tooling (kept outside the repository as well)
+github.sh
+release-now.md
+release-now.sh
+release/

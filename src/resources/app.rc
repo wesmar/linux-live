@@ -1,0 +1,44 @@
+// Resources of LinuxLive.exe. UTF-8 (code page 65001), like every file included below.
+#pragma code_page(65001)
+#include <winres.h>
+#include "resource.h"
+
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+
+// Application icon: replace icon.ico to change it (16 ... 256 px in one file).
+IDI_APP ICON "icon.ico"
+
+1 RT_MANIFEST "app.manifest"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,1,0,0
+ PRODUCTVERSION 1,1,0,0
+ FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+ FILEFLAGS 0
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+ FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", "Marek Wesołowski - wesmar"
+            VALUE "FileDescription", "Linux Live - deploy and boot a shim-signed live system (GUI and command line)"
+            VALUE "FileVersion", "1.1.0.0"
+            VALUE "InternalName", "LinuxLive"
+            VALUE "LegalCopyright", "© 2026 Marek Wesołowski - wesmar"
+            VALUE "OriginalFilename", "LinuxLive.exe"
+            VALUE "ProductName", "Linux Live"
+            VALUE "ProductVersion", "1.1.0.0"
+            VALUE "Comments", "https://github.com/wesmar/linux-live"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+// English strings, built in. Other languages are separate files: language\<code>.lng next to the exe.
+#include "lang/en.rc"

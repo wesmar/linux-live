@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Application"><UniqueIdentifier>{70fdd658-5a2f-4009-afee-e8c1560dd2a7}</UniqueIdentifier></Filter>
+    <Filter Include="Core"><UniqueIdentifier>{c56f156b-c9af-4aea-a266-68ed9de13d4a}</UniqueIdentifier></Filter>
+    <Filter Include="EFI"><UniqueIdentifier>{2d4e6ed2-6e16-4fae-8a90-a5f7fd0e4533}</UniqueIdentifier></Filter>
+    <Filter Include="GUI"><UniqueIdentifier>{fdd43246-f039-4e73-a6c3-0c6e925ae2b6}</UniqueIdentifier></Filter>
+    <Filter Include="Install"><UniqueIdentifier>{cbf69783-5a5f-45ca-b4aa-4baa4c87a422}</UniqueIdentifier></Filter>
+    <Filter Include="Network"><UniqueIdentifier>{92a04795-2409-4cb5-aa7e-82ded4585db2}</UniqueIdentifier></Filter>
+    <Filter Include="Resources"><UniqueIdentifier>{faac324a-0763-412c-9883-4850fb71aca9}</UniqueIdentifier></Filter>
+    <Filter Include="Resources\Languages"><UniqueIdentifier>{75a4c992-a8da-4ced-ad86-17f094095fdb}</UniqueIdentifier></Filter>
+    <Filter Include="Storage"><UniqueIdentifier>{9c63d3b5-697d-4368-9afa-1b1edb6f73c9}</UniqueIdentifier></Filter>
+    <Filter Include="Support"><UniqueIdentifier>{e21f1989-1580-49a2-b6bd-ca57d0a4ea0c}</UniqueIdentifier></Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\app\Cli.cpp"><Filter>Application</Filter></ClCompile>
+    <ClCompile Include="src\app\Console.cpp"><Filter>Application</Filter></ClCompile>
+    <ClCompile Include="src\app\main.cpp"><Filter>Application</Filter></ClCompile>
+    <ClCompile Include="src\core\Actions.cpp"><Filter>Core</Filter></ClCompile>
+    <ClCompile Include="src\core\BootList.cpp"><Filter>Core</Filter></ClCompile>
+    <ClCompile Include="src\core\Deploy.cpp"><Filter>Core</Filter></ClCompile>
+    <ClCompile Include="src\core\Sources.cpp"><Filter>Core</Filter></ClCompile>
+    <ClCompile Include="src\efi\Bcd.cpp"><Filter>EFI</Filter></ClCompile>
+    <ClCompile Include="src\efi\Efi.cpp"><Filter>EFI</Filter></ClCompile>
+    <ClCompile Include="src\gui\Dialogs.cpp"><Filter>GUI</Filter></ClCompile>
+    <ClCompile Include="src\gui\MainWindow.cpp"><Filter>GUI</Filter></ClCompile>
+    <ClCompile Include="src\gui\MainWindowCommands.cpp"><Filter>GUI</Filter></ClCompile>
+    <ClCompile Include="src\gui\MainWindowLayout.cpp"><Filter>GUI</Filter></ClCompile>
+    <ClCompile Include="src\gui\MainWindowMenus.cpp"><Filter>GUI</Filter></ClCompile>
+    <ClCompile Include="src\gui\MainWindowState.cpp"><Filter>GUI</Filter></ClCompile>
+    <ClCompile Include="src\gui\Menus.cpp"><Filter>GUI</Filter></ClCompile>
+    <ClCompile Include="src\gui\Theme.cpp"><Filter>GUI</Filter></ClCompile>
+    <ClCompile Include="src\gui\Widgets.cpp"><Filter>GUI</Filter></ClCompile>
+    <ClCompile Include="src\install\EspInstaller.cpp"><Filter>Install</Filter></ClCompile>
+    <ClCompile Include="src\install\Layout.cpp"><Filter>Install</Filter></ClCompile>
+    <ClCompile Include="src\net\Downloader.cpp"><Filter>Network</Filter></ClCompile>
+    <ClCompile Include="src\storage\BitLocker.cpp"><Filter>Storage</Filter></ClCompile>
+    <ClCompile Include="src\storage\BootPartition.cpp"><Filter>Storage</Filter></ClCompile>
+    <ClCompile Include="src\storage\Volumes.cpp"><Filter>Storage</Filter></ClCompile>
+    <ClCompile Include="src\support\Common.cpp"><Filter>Support</Filter></ClCompile>
+    <ClCompile Include="src\support\Settings.cpp"><Filter>Support</Filter></ClCompile>
+    <ClCompile Include="src\support\Sha256.cpp"><Filter>Support</Filter></ClCompile>
+    <ClCompile Include="src\support\Text.cpp"><Filter>Support</Filter></ClCompile>
+    <ClCompile Include="src\support\Wmi.cpp"><Filter>Support</Filter></ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\app\Cli.h"><Filter>Application</Filter></ClInclude>
+    <ClInclude Include="src\app\Console.h"><Filter>Application</Filter></ClInclude>
+    <ClInclude Include="src\core\Actions.h"><Filter>Core</Filter></ClInclude>
+    <ClInclude Include="src\core\BootList.h"><Filter>Core</Filter></ClInclude>
+    <ClInclude Include="src\core\Deploy.h"><Filter>Core</Filter></ClInclude>
+    <ClInclude Include="src\core\Sources.h"><Filter>Core</Filter></ClInclude>
+    <ClInclude Include="src\efi\Bcd.h"><Filter>EFI</Filter></ClInclude>
+    <ClInclude Include="src\efi\Efi.h"><Filter>EFI</Filter></ClInclude>
+    <ClInclude Include="src\gui\Dialogs.h"><Filter>GUI</Filter></ClInclude>
+    <ClInclude Include="src\gui\MainWindow.h"><Filter>GUI</Filter></ClInclude>
+    <ClInclude Include="src\gui\MainWindowDetail.h"><Filter>GUI</Filter></ClInclude>
+    <ClInclude Include="src\gui\Menus.h"><Filter>GUI</Filter></ClInclude>
+    <ClInclude Include="src\gui\Theme.h"><Filter>GUI</Filter></ClInclude>
+    <ClInclude Include="src\gui\Widgets.h"><Filter>GUI</Filter></ClInclude>
+    <ClInclude Include="src\install\EspInstaller.h"><Filter>Install</Filter></ClInclude>
+    <ClInclude Include="src\install\Layout.h"><Filter>Install</Filter></ClInclude>
+    <ClInclude Include="src\net\Downloader.h"><Filter>Network</Filter></ClInclude>
+    <ClInclude Include="src\resources\resource.h"><Filter>Resources</Filter></ClInclude>
+    <ClInclude Include="src\storage\BitLocker.h"><Filter>Storage</Filter></ClInclude>
+    <ClInclude Include="src\storage\BootPartition.h"><Filter>Storage</Filter></ClInclude>
+    <ClInclude Include="src\storage\Volumes.h"><Filter>Storage</Filter></ClInclude>
+    <ClInclude Include="src\support\Common.h"><Filter>Support</Filter></ClInclude>
+    <ClInclude Include="src\support\Config.h"><Filter>Support</Filter></ClInclude>
+    <ClInclude Include="src\support\Handle.h"><Filter>Support</Filter></ClInclude>
+    <ClInclude Include="src\support\Settings.h"><Filter>Support</Filter></ClInclude>
+    <ClInclude Include="src\support\Sha256.h"><Filter>Support</Filter></ClInclude>
+    <ClInclude Include="src\support\Text.h"><Filter>Support</Filter></ClInclude>
+    <ClInclude Include="src\support\Wmi.h"><Filter>Support</Filter></ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\resources\app.rc"><Filter>Resources</Filter></ResourceCompile>
+    <None Include="src\resources\lang\en.rc"><Filter>Resources</Filter></None>
+    <None Include="src\resources\app.manifest"><Filter>Resources</Filter></None>
+    <Image Include="src\resources\icon.ico"><Filter>Resources</Filter></Image>
+    <CopyFileToFolders Include="src\resources\language\ar.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\de.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\es.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\fr.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\it.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\ja.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\pl.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\ru.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\zh-cn.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+  </ItemGroup>
+</Project>
