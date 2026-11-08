@@ -342,7 +342,7 @@ sequenceDiagram
 
 - **Wi-Fi credentials come from Windows, not from the image.** The image's `wpa_supplicant.conf` holds only `ctrl_interface`, `update_config` and `country`. When `/run/live/medium/Windows` exists, `wifi-connect.sh` runs `regedlin wifi --sync /run/live/medium`, and the networks Windows knows work in Linux without typing a password. When no Windows tree is readable, nothing is synced and nothing fails.
 
-**regedlin** (`regedlin-cli 0.2.2`, 60 KB, links only GLib and OpenSSL's libcrypto) is the command-line part of [RegEdLin](https://github.com/wesmar), an offline Windows registry editor for Linux by the same author, built on its own parser and writer for the `regf` hive format (no libhivex). Windows stores Wi-Fi keys encrypted with the machine's DPAPI, so reading them offline means repeating what Windows does at boot:
+**regedlin** (`regedlin-cli 0.2.2`, 60 KB, links only GLib and OpenSSL's libcrypto) is the command-line component of [RegEdLin](https://github.com/wesmar/regedlin), an offline Windows registry editor I developed from scratch for Linux. Unlike legacy tools that depend on `libhivex` or Python wrappers, it is built on its own independent, high-performance binary parser and writer for the `regf` hive format — far more capable, clean, and memory-safe. Windows stores Wi-Fi keys encrypted with the machine's DPAPI, so reading them offline means repeating what Windows does at boot:
 
 1. `Windows\System32\config\SYSTEM`: the boot key, scattered over the class names of four `Control\Lsa` subkeys of the current control set;
 2. `Windows\System32\config\SECURITY`: `Policy\PolEKList` decrypted with the boot key gives the LSA key, which decrypts the LSA secret `Policy\Secrets\DPAPI_SYSTEM\CurrVal` - the DPAPI keys of the machine;
@@ -867,7 +867,7 @@ pwsh -File .\build.ps1
 
 MIT - see [LICENSE.md](LICENSE.md).
 
-Debian, its kernel, shim and GRUB are distributed under their own licences inside the image and the ESP package. RegEdLin, used in the image for the Wi-Fi profiles, is a separate project by the same author.
+Debian, its kernel, shim and GRUB are distributed under their own licences inside the image and the ESP package. [RegEdLin](https://github.com/wesmar/regedlin), used in the image for the offline Wi-Fi profiles, is my separate project for offline Windows registry manipulation.
 
 ---
 
