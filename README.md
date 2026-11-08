@@ -1,8 +1,6 @@
 <div align="center">
 
-<!-- VIDEO / GIF - drop files into images/ and uncomment:
-[![Linux Live - deploy and boot](images/linuxlive.gif)](https://youtu.be/VIDEO_ID)
--->
+![Linux Live](images/ll.jpg)
 
 [![Latest Release](https://img.shields.io/github/v/release/wesmar/linux-live?label=Latest%20Release&style=for-the-badge)](https://github.com/wesmar/linux-live/releases/latest)
 
