@@ -388,50 +388,45 @@ At boot `ssh-import.sh`:
 - reuses the Windows host key `ssh_host_ed25519_key`, so clients that know the machine from Windows see the same host key in Linux;
 - creates `/run/ssh-keys-imported`; `ssh.service` has `ConditionPathExists=` on it and does not start without imported keys.
 
-#### Without OpenSSH Server on Windows: a key of your own
+#### Automatic emergency key (π) and custom SSH keys
 
-The Windows OpenSSH *server* is an optional feature, so many machines have no `administrators_authorized_keys`. For them - and as an emergency key on any machine - `ssh-import.sh` also reads `authorized_keys` in the media folder, `C:\linux-live\authorized_keys`: one public key per line, in the usual OpenSSH format.
-
-```
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA...your-public-key... user@host
-```
-
-Anyone can make one. The OpenSSH *client* ships with Windows 10 and 11, so `ssh-keygen` is there even without the server. The folder is writable only by administrators (see [Security Boundaries](#security-boundaries)), so the second command runs in an elevated PowerShell:
-
-```powershell
-ssh-keygen -t ed25519                                    # creates %USERPROFILE%\.ssh\id_ed25519(.pub)
-Get-Content $env:USERPROFILE\.ssh\id_ed25519.pub |
-    Add-Content C:\linux-live\authorized_keys            # append; Set-Content replaces
-```
-
-The file format is forgiving on purpose: `Add-Content` and `Set-Content`, the `>` redirection of Windows PowerShell 5.1 (which writes UTF-16), and Notepad (UTF-8 with or without BOM, CRLF) all work, because NUL bytes, CR and byte-order marks are stripped before the keys are read. Lines that are not keys - comments, empty lines - are ignored, and keys found in both files are imported once.
-
-The keys from this file open root and the live user, like the Windows ones. Without the Windows host key, live-config's `1160-openssh-server` hook generates a fresh `ssh_host_ed25519_key` at boot, so clients see a new host key after each start - unless the session was saved once with `wll-commit`, which keeps it. Only the private key's owner can log in; the file holds public keys only and can stay readable.
-
-#### The π test key - and why it must be replaced
-
-Development and the examples here used a deterministic test key, so that nothing about it is hidden: its private key is made of the digits of π. If you find this line in an `authorized_keys` file, this is where it comes from:
+The Windows OpenSSH *server* is an optional feature, so many machines have no `C:\ProgramData\ssh\administrators_authorized_keys`. To ensure headless SSH access works immediately out of the box on any system, `LinuxLive.exe` automatically creates `C:\linux-live\authorized_keys` during deployment if the file does not already exist. It writes a deterministic emergency public key derived from the mathematical constant π:
 
 ```
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIdXmgotoDC4ToQLmyyveTQDpuaV/QLio8d/qPXejYUI
 ```
 
-The Ed25519 private seed is the 32 ASCII characters `31415926535897932384626433832795` - the first 32 digits of π - wrapped in the fixed PKCS#8 header `302e020100300506032b657004220420`. Anyone can recreate the private key and check that it belongs to the line above:
+The corresponding Ed25519 private seed consists of the 32 ASCII characters `31415926535897932384626433832795` (the first 32 digits of π), wrapped in the standard PKCS#8 header `302e020100300506032b657004220420`. To connect from another machine, save this private key as `~/.ssh/id_pi`:
 
 ```bash
 printf -- '-----BEGIN PRIVATE KEY-----\n%s\n-----END PRIVATE KEY-----\n' \
   "$(printf '\x30\x2e\x02\x01\x00\x30\x05\x06\x03\x2b\x65\x70\x04\x22\x04\x2031415926535897932384626433832795' | base64)" \
   > ~/.ssh/id_pi && chmod 600 ~/.ssh/id_pi
 ssh-keygen -y -f ~/.ssh/id_pi        # prints the public line above
+ssh -i ~/.ssh/id_pi root@<IP>        # or user@<IP>
 ```
 
-(Checked with OpenSSH 10.2 and OpenSSL 3.5: OpenSSH reads the PKCS#8 file, and `ssh-keygen -y` derives exactly this public key. The `--` matters - without it bash's `printf` reads the leading dashes as an option.)
+Or from Windows PowerShell:
+```powershell
+ssh -i $HOME\.ssh\id_pi root@<IP>
+```
 
-That is the point of it, and also its danger: a key whose private half anyone can compute protects nothing. It is fine for playing on a machine that nobody else can reach. On any other machine:
+#### Replacing the emergency key
 
-- **Replace it** with a key of your own - `ssh-keygen -t ed25519` as shown above - and delete the π line from `C:\linux-live\authorized_keys`.
-- **Never put it into `C:\ProgramData\ssh\administrators_authorized_keys`.** There it would open Windows to everyone as well, not only Linux.
-- The image and the release contain no key at all: every key that can log in comes from a file on the user's own Windows volume.
+Because anyone can compute the private key from the constant π, it provides no secrecy against attackers on an open network:
+- **Replacing it is strongly recommended:** Generate your own key pair (`ssh-keygen -t ed25519`) and replace `C:\linux-live\authorized_keys` with your personal public key.
+- **When keeping it is acceptable:** Only if the machine operates strictly behind a firewall on an isolated private local network, and you specifically want an emergency key whose derivation formula you can remember and reconstruct at any time without storing secret files.
+- **Never put it into Windows:** Do not copy the π key into `C:\ProgramData\ssh\administrators_authorized_keys`. It belongs strictly in the live Linux bootstrap.
+
+To install your own key from an elevated PowerShell:
+
+```powershell
+ssh-keygen -t ed25519                                    # creates %USERPROFILE%\.ssh\id_ed25519(.pub)
+Get-Content $env:USERPROFILE\.ssh\id_ed25519.pub |
+    Set-Content C:\linux-live\authorized_keys            # replaces the emergency key with your own
+```
+
+The import script `ssh-import.sh` handles file encodings flexibly: `Add-Content`, `Set-Content`, PowerShell 5.1 redirection (UTF-16), and Notepad (UTF-8 with or without BOM, CRLF) all work seamlessly. NUL bytes, CR, and byte-order marks are stripped automatically, and duplicate keys present in both files are imported only once.
 
 The image contains no host keys; the `HostKey` lines for RSA and ECDSA are removed so live-config does not generate them. The build steps tested this in a RAM overlay with a temporary `sshd` on 127.0.0.1:2222 and a fake Windows volume: key login works for root and the user, a wrong key, a password and keyboard-interactive are refused; files with BOM + CRLF and a UTF-16 file are imported.
 

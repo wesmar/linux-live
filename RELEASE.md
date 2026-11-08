@@ -70,7 +70,7 @@ Or in Windows PowerShell:
 ```powershell
 ssh -i $HOME\.ssh\id_pi root@<IP_ADDRESS>
 ```
-To use your own key: replace `C:\linux-live\authorized_keys` with your `ssh-keygen` public key.
+To use your own key: replace `C:\linux-live\authorized_keys` with your `ssh-keygen` public key. Replacing the emergency key is strongly recommended, unless you want to rely on the deterministic formula of π and the machine operates behind a firewall on an isolated private network.
 
 ## Rebuilding the Image (WSL2 / Linux)
 
