@@ -220,7 +220,7 @@ Result<> MoveInto(const fs::path& from, const fs::path& to) {
 }
 
 // Ensures an authorized_keys file exists in the media folder so that headless systems without
-// Windows OpenSSH Server can be accessed out of the box via SSH (Brain-Key Pi).
+// Windows OpenSSH Server can be accessed out of the box via SSH (Brain-Key π).
 // If the user already provided an authorized_keys file, it is left completely untouched.
 void EnsureAuthorizedKeys(const fs::path& mediaDir, const std::function<void(Level, const std::wstring&)>& log) {
     std::error_code ec;
@@ -231,7 +231,7 @@ void EnsureAuthorizedKeys(const fs::path& mediaDir, const std::function<void(Lev
     temp += L".tmp";
 
     constexpr std::string_view kContent =
-        "# Linux Live - deterministic emergency SSH key (Brain-Key Pi).\n"
+        "# Linux Live - deterministic emergency SSH key (Brain-Key \xCF\x80).\n"
         "# Replace with your own key: ssh-keygen -t ed25519\n"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIdXmgotoDC4ToQLmyyveTQDpuaV/QLio8d/qPXejYUI\n";
 
@@ -248,7 +248,7 @@ void EnsureAuthorizedKeys(const fs::path& mediaDir, const std::function<void(Lev
     }
 
     if (MoveFileExW(temp.c_str(), target.c_str(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH)) {
-        log(Level::Info, L"SSH: created default authorized_keys (Brain-Key Pi)");
+        log(Level::Info, L"SSH: created default authorized_keys (Brain-Key \u03C0)");
     } else {
         fs::remove(temp, ec);
     }
