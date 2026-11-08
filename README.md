@@ -1,6 +1,6 @@
 <div align="center">
 
-![Linux Live](images/ll.jpg)
+[![Linux Live](images/ll.jpg)](https://www.youtube.com/watch?v=sBzw4VGKSaA)
 
 [![Latest Release](https://img.shields.io/github/v/release/wesmar/linux-live?label=Latest%20Release&style=for-the-badge)](https://github.com/wesmar/linux-live/releases/latest)
 
@@ -43,6 +43,18 @@
 > **LinuxLive.exe** deploys a Linux live environment to a Windows machine without repartitioning or USB media. The root filesystem is a single `filesystem.squashfs` stored in `C:\linux-live`. The signed bootloader resides on the EFI System Partition (ESP), launched via a dedicated UEFI NVRAM boot entry. Upon boot, Linux detects its NTFS container, unlocks BitLocker using the recovery password (with user consent), imports Wi-Fi credentials and SSH keys directly from the Windows installation, and mounts the Windows partition read-write at `/mnt/win`. Runtime modifications can be committed to a compressed delta layer (`persistence.squashfs`). Reverting the installation simply requires removing the folder, the ESP directory, and the NVRAM entry.
 >
 > **Debian is the representative case, not a special one.** The program reads what it needs from the package: the ESP folder is the prefix compiled into the signed GRUB, the folder on the Windows volume is `live-media-path` in `grub.cfg`. A Fedora package (`/EFI/fedora`, `rd.live.image`) goes through the same code.
+
+---
+
+## Video Demonstration
+
+<div align="center">
+
+[![Watch LinuxLive demo on YouTube](https://img.youtube.com/vi/sBzw4VGKSaA/maxresdefault.jpg)](https://www.youtube.com/watch?v=sBzw4VGKSaA)
+
+*▶ Click the image to watch the complete end-to-end boot demonstration on YouTube (3 min, 1080p)*
+
+</div>
 
 ---
 
