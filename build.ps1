@@ -98,4 +98,4 @@ $outputs = @($outputs | ForEach-Object {
     visualStudio = $toolchain.vs; inputs = $inputs; outputs = $outputs
 } | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $bin 'build-receipt.json') -Encoding utf8
 $outputs | Format-Table -AutoSize
-Write-Host "Build succeeded (/W4 /WX /sdl /guard:cf, CET). Receipt: bin\build-receipt.json" -ForegroundColor Green
+Write-Host "Build succeeded (/W4 /WX /sdl /guard:cf, CET, /Brepro). Receipt: bin\build-receipt.json" -ForegroundColor Green

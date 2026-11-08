@@ -104,7 +104,7 @@ Export a template with: `LinuxLive.exe lng-export language/custom.lng`
 
 | File | Size | SHA-256 |
 |---|---|---|
-| `LinuxLive.7z` | 408,400 bytes | `952989d473be2a59f10180cde5119f01f44c12117e11487d7ffbe2713e201af4` |
+| `LinuxLive.7z` | 408,224 bytes | `40c2523a5ba7026b156aade96248220a98fa37cff3d12a20f05abbe88e1c0379` |
 | `filesystem.squashfs` | 1,147,117,568 bytes | `a0f4fc01776e5d64da934e60dd6b945bde7759c99fdda4352a3f22f6127ecbe1` |
 | `filesystem.squashfs.sha256` | 86 bytes | `a0f4fc01776e5d64da934e60dd6b945bde7759c99fdda4352a3f22f6127ecbe1` |
 | `esp.tar` | 59,637,760 bytes | `31d221302b75059711da47c48d3af634f14ee3187a0309a26b9bf9dc8f41a5f0` |

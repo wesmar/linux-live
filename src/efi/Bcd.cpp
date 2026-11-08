@@ -36,6 +36,8 @@ bool Succeeded(IWbemClassObject* out) { return out && GetBool(out, L"ReturnValue
 
 std::wstring ObjectPath(const std::wstring& id) { return std::format(L"BcdObject.Id=\"{}\",StoreFilePath=\"\"", id); }
 
+bool GoneFromHive(const std::wstring& id);
+
 class Store {
 public:
     static Result<Store> Open() {
@@ -76,12 +78,15 @@ public:
     }
 
     Result<> Delete(const std::wstring& id) const {
+        // Opening the system store over WMI (BcdOpenSystemStore) synchronizes it with NVRAM and may
+        // already purge a firmware object whose Boot#### variable was just deleted.
+        if (GoneFromHive(id)) return {};
         auto in = m_svc.InParams(L"BcdStore", L"DeleteObject");
         if (!in) return Fail(in.error());
         PutString(in->get(), L"Id", id);
         auto out = m_svc.Call(kStorePath, L"DeleteObject", in->get());
         if (!out) return Fail(out.error());
-        if (!Succeeded(out->get())) return Fail(std::format(L"BcdStore.DeleteObject {} failed.", id));
+        if (!Succeeded(out->get()) && !GoneFromHive(id)) return Fail(std::format(L"BcdStore.DeleteObject {} failed.", id));
         return {};
     }
 
@@ -119,6 +124,13 @@ struct RegKey {
 // inherit the privilege from the parent handle.
 bool OpenBackup(HKEY parent, const std::wstring& subkey, RegKey& key) {
     return RegOpenKeyExW(parent, subkey.c_str(), REG_OPTION_BACKUP_RESTORE, KEY_READ, &key.h) == ERROR_SUCCESS;
+}
+
+bool GoneFromHive(const std::wstring& id) {
+    (void)EnablePrivilege(SE_BACKUP_NAME);
+    RegKey objects, item;
+    if (!OpenBackup(HKEY_LOCAL_MACHINE, L"BCD00000000\\Objects", objects)) return false;
+    return !OpenBackup(objects.h, id, item);
 }
 
 std::wstring HiveString(HKEY parent, const std::wstring& subkey) {
