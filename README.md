@@ -22,11 +22,11 @@
 
 </div>
 
-> **Engineering status**
+> **Engineering Status**
 >
-> `LinuxLive.exe` deploys and boots a complete Linux live system that lives as one file on the Windows NTFS volume. The boot chain is Microsoft-signed shim → distribution-signed GRUB → distribution-signed kernel, so Secure Boot stays enabled and no key is enrolled. BitLocker-encrypted Windows volumes are unlocked read-only in the initrd. Download, SHA-256 check, ESP deployment, NVRAM entry, one-time boot, Linux start with BitLocker unlock, network and SSH, persistence, return to Windows and the small-ESP boot partition were tested end to end on a Dell XPS 7590 (Windows 11, Secure Boot on, BitLocker on). Debian 13 with the signed 7.2.11 kernel is the reference image; a distribution that ships a signed shim, GRUB and kernel works the same way.
+> `LinuxLive.exe` deploys and boots a complete Linux live system residing as a single file on the Windows NTFS volume. The boot chain relies on standard Microsoft-signed shim → distribution-signed GRUB → distribution-signed kernel, maintaining full Secure Boot enforcement without MOK enrollment. BitLocker-encrypted volumes unlock seamlessly at boot. Verified end-to-end on Dell XPS (Windows 11, Secure Boot ON, BitLocker ON). Debian 13 with the signed 7.2.11 kernel serves as the reference image; any distribution providing a signed shim, GRUB, and kernel functions identically.
 
-> **Repository policy:** Git tracks the Windows source, project files, language files, tests and the scripts that build the Linux image. Build outputs, release scripts and local tooling stay outside the repository.
+> **Repository Policy:** Git tracks the native Windows C++23 source, project files, language files, test suites, and image build scripts. Binary build artifacts, releases, and local packaging tools stay outside the repository.
 
 # Linux Live — a Signed Linux System on the Windows Volume
 
@@ -36,18 +36,60 @@
 
 **One file on C: • Secure Boot on • BitLocker unlocked • Wi-Fi and SSH from Windows • C: writable from Linux**
 
-*No repartitioning, no USB stick, no MOK enrolment: shim and GRUB from the distribution, the image next to your documents*
+*No repartitioning, no USB stick, no MOK enrolment: official distribution signatures, native NTFS integration*
 
 </div>
 
-> **LinuxLive.exe** puts a Linux live system on a Windows computer without changing the disk layout. The root file system is a single `filesystem.squashfs` in a folder of the Windows volume (`C:\linux-live`). The signed boot loader goes to the EFI System Partition. One NVRAM entry starts it, once or by default. Linux finds its image on NTFS, unlocks BitLocker with the recovery password when the user allowed it to be stored, takes the Wi-Fi profiles and SSH keys of the Windows installation, and mounts C: read-write at `/mnt/win`. A session can be saved as a compressed delta layer. Removing it all means deleting a folder, an ESP folder and an NVRAM entry.
+> **LinuxLive.exe** deploys a Linux live environment to a Windows machine without repartitioning or USB media. The root filesystem is a single `filesystem.squashfs` stored in `C:\linux-live`. The signed bootloader resides on the EFI System Partition (ESP), launched via a dedicated UEFI NVRAM boot entry. Upon boot, Linux detects its NTFS container, unlocks BitLocker using the recovery password (with user consent), imports Wi-Fi credentials and SSH keys directly from the Windows installation, and mounts the Windows partition read-write at `/mnt/win`. Runtime modifications can be committed to a compressed delta layer (`persistence.squashfs`). Reverting the installation simply requires removing the folder, the ESP directory, and the NVRAM entry.
 >
 > **Debian is the representative case, not a special one.** The program reads what it needs from the package: the ESP folder is the prefix compiled into the signed GRUB, the folder on the Windows volume is `live-media-path` in `grub.cfg`. A Fedora package (`/EFI/fedora`, `rd.live.image`) goes through the same code.
 
 ---
 
+## Quick Start
+
+`LinuxLive.exe` runs both as an interactive Direct2D graphical application (GUI) and as an automated command-line tool (CLI).
+
+### 1. GUI (Interactive)
+1. Download **`LinuxLive.7z`** (archive password: **`github.com`**) and extract it.
+2. Run `LinuxLive.exe` as Administrator.
+3. Click **Download & deploy** — the program downloads `filesystem.squashfs` and `esp.tar`, verifies SHA-256 digests, populates the ESP, creates `C:\linux-live\authorized_keys`, and adds a UEFI NVRAM entry.
+4. Click **Boot once** and restart.
+
+### 2. Command Line (CLI for Automation and Scripts)
+Pass arguments to `LinuxLive.exe` to run directly in the console:
+```cmd
+:: 1. Deploy: download release assets, verify SHA-256 digests, configure ESP and read BitLocker key
+LinuxLive.exe deploy --github --bitlocker-key
+
+:: 2. Set one-time boot to Linux on the next reboot
+LinuxLive.exe once
+
+:: 3. Reboot directly into Linux
+LinuxLive.exe reboot
+```
+Common CLI commands:
+* `LinuxLive.exe status` — view current deployment and ESP status
+* `LinuxLive.exe list` — list UEFI boot entries
+* `LinuxLive.exe default` — set Linux as the default boot entry
+* `LinuxLive.exe delete` — remove UEFI entry and clean up BCD references
+
+### 3. First Minutes in Linux
+* **Login:** Automatic console login to `user` (`user@debian:~$`) with passwordless `sudo`.
+* **Network & Wi-Fi:** Ethernet uses DHCP; Wi-Fi profiles and passwords sync automatically from the Windows registry. Verify connectivity: `ping -c 4 linux.org`.
+* **Headless SSH:** Connect over SSH immediately using the deterministic emergency π key (`~/.ssh/id_pi`).
+* **Windows Drive Access:** The BitLocker volume is mounted read-write at `/mnt/win` (`ls -la /mnt/win`).
+* **Session Persistence:** Save package installations and state to `C:\linux-live\persistence.squashfs` with `save-session`. Revert anytime via `save-session --reset`.
+* **Return to Windows:** Run `reboot` to start standard Windows Boot Manager normally.
+
+---
+
 ## Table of Contents
 
+- [Quick Start](#quick-start)
+  - [GUI (Interactive)](#1-gui-interactive)
+  - [Command Line (CLI)](#2-command-line-cli-for-automation-and-scripts)
+  - [First Minutes in Linux](#3-first-minutes-in-linux)
 - [Overview](#overview)
 - [Architecture](#architecture)
 - [The Boot Chain and What Is Signed](#the-boot-chain-and-what-is-signed)
@@ -55,7 +97,7 @@
 - [Inside the Image](#inside-the-image)
   - [The initrd](#the-initrd)
   - [Kernel and firmware](#kernel-and-firmware)
-  - [Nothing fixed at build time - everything resolved at boot](#nothing-fixed-at-build-time---everything-resolved-at-boot)
+  - [Dynamic Hardware and Runtime Discovery at Boot](#dynamic-hardware-and-runtime-discovery-at-boot)
   - [BitLocker in the initrd](#bitlocker-in-the-initrd)
   - [Secure Boot is kept, end to end](#secure-boot-is-kept-end-to-end)
   - [Two views of one volume: the live medium and /mnt/win](#two-views-of-one-volume-the-live-medium-and-mntwin)
@@ -63,7 +105,7 @@
   - [SSH with the keys of Windows](#ssh-with-the-keys-of-windows)
   - [Persistence as a delta squashfs](#persistence-as-a-delta-squashfs)
   - [Console, clock, locale and boot time](#console-clock-locale-and-boot-time)
-  - [Tools and what the image does not contain](#tools-and-what-the-image-does-not-contain)
+  - [Pre-Installed Diagnostics and Image Footprint](#pre-installed-diagnostics-and-image-footprint)
 - [Building the Image](#building-the-image)
   - [The image file](#the-image-file)
 - [The Build Steps in Detail](#the-build-steps-in-detail)
@@ -80,7 +122,7 @@
   - [Graphical interface](#graphical-interface)
   - [Languages](#languages)
 - [Security Boundaries](#security-boundaries)
-  - [Nothing that Windows did not already give its administrator](#nothing-that-windows-did-not-already-give-its-administrator)
+  - [Security Model and Administrator Privileges](#security-model-and-administrator-privileges)
 - [Known Issues](#known-issues)
 - [Testing](#testing)
 - [Source Layout](#source-layout)
@@ -103,13 +145,13 @@ Ways of running Linux on a Windows computer, and what each one costs:
 
 Typical uses: Linux with full hardware access on a BitLocker-protected laptop without touching its partitioning; a rescue and diagnostics system that is always there (`efibootmgr`, `mokutil`, `nvme-cli`, `cryptsetup`, `parted`, `gdisk`, `msr-tools`, `tcpdump`); new hardware that needs a current kernel - the reference image runs the signed 7.2.11 kernel from Debian backports.
 
-Design rules:
+Design principles:
 
-- **Signatures are never touched.** shim, GRUB and the kernel are carried over byte for byte; the build steps fail when any of them changes.
-- **The package states its layout.** No folder name is a constant of the program or of the scripts in the image.
-- **Nothing is left behind.** Builds run in a private tmpfs removed by a trap; the image ships without logs, temporary files, host keys, machine ID or credentials.
-- **Consent for what weakens or changes the system.** The BitLocker recovery password goes to the ESP only after an explicit yes (`--bitlocker-key`); the Windows volume is shrunk only after an explicit yes (`--boot-partition`).
-- **Warning-free is the minimum.** `/W4 /WX /sdl /guard:cf`, CET shadow stack compatible, C++23.
+- **Preserving official signatures:** shim, GRUB, and kernel binaries are used byte-for-byte from upstream distribution packages, ensuring full Secure Boot compatibility without custom key enrollment.
+- **Dynamic package layout:** Paths and ESP directory structures are resolved dynamically from the distribution package rather than hardcoded in the executable.
+- **Clean build lifecycle:** Image builds run in isolated tmpfs environments; the resulting container contains zero stale logs, temporary caches, machine identifiers, or hardcoded credentials.
+- **Explicit user consent:** Potentially sensitive operations require explicit confirmation: saving the BitLocker recovery password to ESP (`--bitlocker-key`) or shrinking the Windows partition for a dedicated boot partition (`--boot-partition`).
+- **Strict compiler standards:** C++23, compiled cleanly with `/W4 /WX /sdl /guard:cf /CETCompat /Brepro` on MSVC.
 
 ---
 
@@ -203,9 +245,9 @@ Collisions: the ESP folder is fixed by the signature, so an installed Debian use
 
 The reference image is Debian 13 (trixie) live, rebuilt in 16 audited steps ([Building the Image](#building-the-image)). The sections below describe what makes it work on another person's Windows computer.
 
-### Nothing fixed at build time - everything resolved at boot
+### Dynamic Hardware and Runtime Discovery at Boot
 
-The image knows nothing about the computer it will start on: no folder name, no partition, no UUID, no interface name, no address, no key, no password. Each of these is found while the system starts:
+The image is completely machine-agnostic: no hardcoded partition IDs, UUIDs, interface names, IP addresses, or embedded credentials. Every parameter is discovered dynamically at startup:
 
 | What | How it is found at boot |
 |---|---|
@@ -225,7 +267,7 @@ The image knows nothing about the computer it will start on: no folder name, no 
 | console font | framebuffer width in `/sys/class/graphics/fb0/virtual_size` |
 | persistence file | `<media>/persistence.squashfs` on the Windows volume |
 
-All of it is done by plain shell scripts in `/usr/local/bin` and the initrd - `console-font.sh` 312 bytes, `network-ready.sh` 233, `update-dns.sh` 487, `wifi-connect.sh` 1 120, `ssh-import.sh` 1 474, `mount-win.sh` 1 524, `wll-commit` 4 629, `unlock-bitlocker` in the initrd - and one small binary, regedlin (60 KB). No daemon of its own, no closed component, nothing that cannot be read in a minute on the running system.
+This discovery is implemented via lightweight shell scripts in `/usr/local/bin` and the initrd (`console-font.sh`, `network-ready.sh`, `update-dns.sh`, `wifi-connect.sh`, `ssh-import.sh`, `mount-win.sh`, `wll-commit`, `unlock-bitlocker`) alongside the compact `regedlin` binary (60 KB). All logic is auditable, open, and inspectable directly on the running system.
 
 ### The initrd
 
@@ -432,13 +474,13 @@ The image contains no host keys; the `HostKey` lines for RSA and ECDSA are remov
 
 ### Persistence as a delta squashfs
 
-`wll-commit` (alias `save-session`) packs the upper layer of the overlay - everything changed in the session - into `C:\<media>\persistence.squashfs` (zstd level 15, 1 MiB blocks), merged with the layer loaded at boot when there is one. live-boot mounts every squashfs of the media folder in name order, so the next boot stacks `filesystem.squashfs`, `persistence.squashfs` and a fresh tmpfs.
+`save-session` (symlinked to `wll-commit`) packs the upper layer of the overlay — all runtime modifications made during the live session — into `C:\<media>\persistence.squashfs` (zstd level 15, 1 MiB blocks), merged with any existing persistence layer loaded at boot. On subsequent boots, live-boot mounts the squashfs containers in alphabetical order, stacking `filesystem.squashfs`, `persistence.squashfs`, and a fresh RAM tmpfs on top.
 
-```
-wll-commit             save the session
-wll-commit --status    file size, layer loaded at boot, changed items in RAM
-wll-commit --auto-on   save automatically at shutdown (--auto-off)
-wll-commit --reset     delete the layer: the next boot is the clean image
+```bash
+save-session             # persist session changes to C:\linux-live\persistence.squashfs
+save-session --status    # view layer size and modified files residing in RAM
+save-session --auto-on   # enable automatic save on shutdown (--auto-off to disable)
+save-session --reset     # remove persistence layer to restore pristine base image
 ```
 
 Excluded from a save: `tmp`, `var/tmp`, `var/log`, `var/cache/apt/archives/*.deb`, `run`, `mnt`, `media`. The new layer is written as `persistence.squashfs.new.<pid>`, synced and renamed over the old one, so an interrupted save leaves the previous layer intact. The media folder comes from `live-media-path`, like everywhere else.
@@ -451,11 +493,11 @@ Excluded from a save: `tmp`, `var/tmp`, `var/log`, `var/cache/apt/archives/*.deb
 - journald is volatile (16 MB); sysstat, apt-listchanges, cups, colord, lm-sensors, smartd and e2scrub are masked.
 - Measured on the XPS 7590: kernel 4.5 s, userspace 14.4 s; SSH answers 15-20 s after the restart.
 
-### Tools and what the image does not contain
+### Pre-Installed Diagnostics and Image Footprint
 
-Included for diagnostics and recovery: `efibootmgr mokutil cryptsetup nvme-cli parted gdisk msr-tools tcpdump dosfstools squashfs-tools` and `regedlin`. The image was fully upgraded in step 13; the step refuses to finish while `apt list --upgradable` reports anything.
+Essential utilities for system recovery, partition management, and hardware diagnosis are pre-installed in the image: `efibootmgr`, `mokutil`, `cryptsetup`, `nvme-cli`, `parted`, `gdisk`, `msr-tools`, `tcpdump`, `dosfstools`, `squashfs-tools`, and `regedlin`. The base distribution packages are kept synchronized with upstream Debian backports.
 
-Checked by the build steps before packing: no SSH host keys, empty `machine-id`, no shell history, every file in `var/log` empty, `tmp` and `var/tmp` empty, no apt lists or cached packages, no `policy-rc.d`, no `passwd-`/`shadow-` backups, no `psk=` lines, no `__pycache__`, no ntfs-3g or FUSE packages.
+Build verification ensures the squashfs image is clean and stateless: zero SSH host keys, uninitialized `machine-id`, no shell history, cleared `/var/log` and `/tmp`, no cached APT archives, no credential backups, and no legacy FUSE or ntfs-3g packages (relying exclusively on the modern in-kernel NTFS module).
 
 ---
 
@@ -750,22 +792,35 @@ ssh root@laptop                     # the same address, now Linux, the same keys
 
 ### Languages
 
-English is built in. Other languages are plain UTF-8 files next to the program, `language\<code>.lng`, in the style of IrfanView: `<id>=<text>`, `#name=` and `#locale=` headers, `\n` for line breaks. The language follows Windows (`GetUserPreferredUILanguages`, then the `#locale` lists of the files) or is chosen in *View > Language*, where each file is listed under its own name with its coverage. Strings are formatted with `std::vformat`; a missing string, or a translation whose `{}` fields do not match the English text, falls back to English instead of failing.
+English is built in. Additional languages are plain UTF-8 files located in `language\<code>.lng` next to the executable, using an intuitive key-value structure (`<id>=<text>`, `#name=` and `#locale=` headers, `\n` for line breaks). The UI language detects your Windows display language automatically via `GetUserPreferredUILanguages` or can be selected manually under *View > Language*, where each translation displays its native name and coverage percentage. Strings are formatted safely using C++20 `std::vformat`; any missing string or mismatched format argument falls back cleanly to English.
 
-Included: Polski, Deutsch, Español, Français, Italiano - 293 strings each, 100 %.
+**Shipped languages (100% coverage, 293 strings each):**
+* English (built-in)
+* Polish (`pl` — Polski)
+* German (`de` — Deutsch)
+* Spanish (`es` — Español)
+* French (`fr` — Français)
+* Italian (`it` — Italiano)
+* Russian (`ru` — Русский)
+* Japanese (`ja` — 日本語)
+* Simplified Chinese (`zh-cn` — 简体中文)
+* Arabic (`ar` — العربية)
 
-```
-LinuxLive.exe lng-export language\xx.lng    English template with every id
-LinuxLive.exe lng-check                     coverage, unknown ids, broken {} fields, automatic choice
+**Planned languages:** Portuguese (`pt`), Ukrainian (`uk`), Turkish (`tr`), Korean (`ko`), Dutch (`nl`), Czech (`cs`).
+
+Export an English template or validate translations:
+```cmd
+LinuxLive.exe lng-export language\custom.lng    :: Export template with all IDs
+LinuxLive.exe lng-check                         :: Validate coverage, missing IDs and format fields
 ```
 
 ---
 
 ## Security Boundaries
 
-### Nothing that Windows did not already give its administrator
+### Security Model and Administrator Privileges
 
-Linux Live reads secrets of the Windows installation - and every one of them is something an administrator of that Windows can already see with Windows' own tools. Linux does not get past any boundary Windows has; it uses what Windows exposes to the person who owns the machine, in the same way:
+Linux Live operates within the native Windows security boundary, accessing system data that an elevated Windows administrator already has access to via built-in tools:
 
 | What Linux Live uses | Where it comes from | How the Windows administrator already sees it |
 |---|---|---|
