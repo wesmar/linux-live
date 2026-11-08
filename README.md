@@ -6,7 +6,7 @@
 
 <br><br>
 
-![Linux Live](images/ll.jpg)
+![Linux Live](images/ll.webp)
 
 [![Latest Release](https://img.shields.io/badge/Latest%20Release-v1.1.0-007ec6?style=for-the-badge)](https://github.com/wesmar/linux-live/releases/latest)
 
