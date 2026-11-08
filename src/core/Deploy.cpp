@@ -13,6 +13,8 @@
 #include <chrono>
 #include <filesystem>
 #include <format>
+#include <fstream>
+#include <string_view>
 #include <vector>
 
 namespace DL::Core {
@@ -215,6 +217,41 @@ Result<> MoveInto(const fs::path& from, const fs::path& to) {
     if (!MoveFileExW(from.c_str(), to.c_str(), MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH))
         return Fail(ErrorText(Text::Format(IDS_CTX_SAVE, to.wstring()), GetLastError()));
     return {};
+}
+
+// Ensures an authorized_keys file exists in the media folder so that headless systems without
+// Windows OpenSSH Server can be accessed out of the box via SSH (Brain-Key Pi).
+// If the user already provided an authorized_keys file, it is left completely untouched.
+void EnsureAuthorizedKeys(const fs::path& mediaDir, const std::function<void(Level, const std::wstring&)>& log) {
+    std::error_code ec;
+    const fs::path target = mediaDir / L"authorized_keys";
+    if (fs::exists(target, ec)) return;
+
+    fs::path temp = target;
+    temp += L".tmp";
+
+    constexpr std::string_view kContent =
+        "# Linux Live - deterministic emergency SSH key (Brain-Key Pi).\n"
+        "# Replace with your own key: ssh-keygen -t ed25519\n"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIdXmgotoDC4ToQLmyyveTQDpuaV/QLio8d/qPXejYUI\n";
+
+    {
+        std::ofstream out(temp, std::ios::binary | std::ios::trunc);
+        if (!out) return;
+        out.write(kContent.data(), static_cast<std::streamsize>(kContent.size()));
+        out.flush();
+        if (!out) {
+            out.close();
+            fs::remove(temp, ec);
+            return;
+        }
+    }
+
+    if (MoveFileExW(temp.c_str(), target.c_str(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH)) {
+        log(Level::Info, L"SSH: created default authorized_keys (Brain-Key Pi)");
+    } else {
+        fs::remove(temp, ec);
+    }
 }
 
 }  // namespace
@@ -492,6 +529,12 @@ Result<Install::Layout> Deploy(const Sources::Pair& source, const Storage::EspTa
                                            [&](std::wstring line) { log(Level::Info, line); }, hooks.confirm);
         !r)
         log(Level::Warning, Text::Format(IDS_DEPLOY_BITLOCKER_ERROR, r.error()));
+
+    // --- 8. SSH authorized_keys ----------------------------------------------------
+    // Seeded with the deterministic Brain-Key Pi public key so headless systems without
+    // Windows OpenSSH can be accessed out of the box. Never overwrites an existing file.
+    EnsureAuthorizedKeys(data->dir, log);
+
     return *layout;
 }
 
