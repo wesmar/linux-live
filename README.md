@@ -6,7 +6,7 @@
 
 [![Latest Release](https://img.shields.io/github/v/release/wesmar/linux-live?label=Latest%20Release&style=for-the-badge)](https://github.com/wesmar/linux-live/releases/latest)
 
-**[⬇ LinuxLive.exe](https://github.com/wesmar/linux-live/releases/latest/download/LinuxLive.exe)**
+**[⬇ LinuxLive.7z](https://github.com/wesmar/linux-live/releases/latest/download/LinuxLive.7z)** *(Password: `github.com`)*
 &nbsp;·&nbsp;
 **[filesystem.squashfs](https://github.com/wesmar/linux-live/releases/latest/download/filesystem.squashfs)**
 &nbsp;·&nbsp;
@@ -14,7 +14,7 @@
 &nbsp;·&nbsp;
 **[All Releases](https://github.com/wesmar/linux-live/releases)**
 
-> The program downloads the image and the ESP package itself and checks both against their `.sha256` files. The direct links are for offline installs.
+> The application is packaged in **`LinuxLive.7z`** (password: **`github.com`**) to bundle all 10 language localizations and protect against false-positive browser download blocks. The program downloads the image and the ESP package itself and checks both against their `.sha256` files. The direct links are for offline installs.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011%20x64%20UEFI-2563eb.svg)]()
