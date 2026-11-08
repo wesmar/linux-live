@@ -12,7 +12,7 @@
 &nbsp;·&nbsp;
 **[All Releases](https://github.com/wesmar/linux-live/releases)**
 
-> The application is packaged in **`LinuxLive.7z`** (password: **`github.com`**) to bundle all 10 language localizations and protect against false-positive browser download blocks. The program downloads the image and the ESP package itself and checks both against their `.sha256` files. The direct links are for offline installs.
+> The application is packaged in **`LinuxLive.7z`** (password: **`github.com`**) to bundle all 21 language localizations and protect against false-positive browser download blocks. The program downloads the image and the ESP package itself and checks both against their `.sha256` files. The direct links are for offline installs.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011%20x64%20UEFI-2563eb.svg)]()
@@ -805,8 +805,19 @@ English is built in. Additional languages are plain UTF-8 files located in `lang
 * Japanese (`ja` — 日本語)
 * Simplified Chinese (`zh-cn` — 简体中文)
 * Arabic (`ar` — العربية)
+* Portuguese (`pt` — Português)
+* Ukrainian (`uk` — Українська)
+* Turkish (`tr` — Türkçe)
+* Korean (`ko` — 한국어)
+* Dutch (`nl` — Nederlands)
+* Czech (`cs` — Čeština)
+* Traditional Chinese (`zh-tw` — 繁體中文)
+* Indonesian (`id` — Bahasa Indonesia)
+* Vietnamese (`vi` — Tiếng Việt)
+* Persian (`fa` — فارسی)
+* Hindi (`hi` — हिन्दी)
 
-**Planned languages:** Portuguese (`pt`), Ukrainian (`uk`), Turkish (`tr`), Korean (`ko`), Dutch (`nl`), Czech (`cs`).
+**More languages welcome:** export a template with `lng-export`, translate it and open a pull request.
 
 Export an English template or validate translations:
 ```cmd

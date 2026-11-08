@@ -79,13 +79,24 @@
     <None Include="src\resources\app.manifest"><Filter>Resources</Filter></None>
     <Image Include="src\resources\icon.ico"><Filter>Resources</Filter></Image>
     <CopyFileToFolders Include="src\resources\language\ar.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\cs.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
     <CopyFileToFolders Include="src\resources\language\de.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
     <CopyFileToFolders Include="src\resources\language\es.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\fa.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
     <CopyFileToFolders Include="src\resources\language\fr.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\hi.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\id.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
     <CopyFileToFolders Include="src\resources\language\it.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
     <CopyFileToFolders Include="src\resources\language\ja.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\ko.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\nl.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
     <CopyFileToFolders Include="src\resources\language\pl.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\pt.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
     <CopyFileToFolders Include="src\resources\language\ru.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\tr.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\uk.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\vi.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
     <CopyFileToFolders Include="src\resources\language\zh-cn.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\zh-tw.lng"><Filter>Resources\Languages</Filter></CopyFileToFolders>
   </ItemGroup>
 </Project>

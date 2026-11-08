@@ -158,14 +158,25 @@
   <ItemGroup>
     <!-- Language files are not compiled in: they are copied next to the executable (bin\language). -->
     <CopyFileToFolders Include="src\resources\language\ar.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\cs.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
     <CopyFileToFolders Include="src\resources\language\de.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
     <CopyFileToFolders Include="src\resources\language\es.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\fa.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
     <CopyFileToFolders Include="src\resources\language\fr.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\hi.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\id.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
     <CopyFileToFolders Include="src\resources\language\it.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
     <CopyFileToFolders Include="src\resources\language\ja.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\ko.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\nl.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
     <CopyFileToFolders Include="src\resources\language\pl.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\pt.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
     <CopyFileToFolders Include="src\resources\language\ru.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\tr.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\uk.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\vi.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
     <CopyFileToFolders Include="src\resources\language\zh-cn.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
+    <CopyFileToFolders Include="src\resources\language\zh-tw.lng"><DestinationFolders>$(OutDir)language</DestinationFolders></CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

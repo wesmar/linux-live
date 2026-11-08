@@ -96,15 +96,25 @@ The UI matches Windows display language automatically:
 * Japanese (`ja`)
 * Simplified Chinese (`zh-cn`)
 * Arabic (`ar`)
+* Portuguese (`pt`)
+* Ukrainian (`uk`)
+* Turkish (`tr`)
+* Korean (`ko`)
+* Dutch (`nl`)
+* Czech (`cs`)
+* Traditional Chinese (`zh-tw`)
+* Indonesian (`id`)
+* Vietnamese (`vi`)
+* Persian (`fa`)
+* Hindi (`hi`)
 
-Planned languages: `pt`, `uk`, `tr`, `ko`, `nl`, `cs`.
 Export a template with: `LinuxLive.exe lng-export language/custom.lng`
 
 ## Release Assets
 
 | File | Size | SHA-256 |
 |---|---|---|
-| `LinuxLive.7z` | 408,224 bytes | `40c2523a5ba7026b156aade96248220a98fa37cff3d12a20f05abbe88e1c0379` |
+| `LinuxLive.7z` | 455,392 bytes | `56256664c1802b2044bcf61c8514bcd57f0f7676c505fa0a16fa60e3fe129681` |
 | `filesystem.squashfs` | 1,147,117,568 bytes | `a0f4fc01776e5d64da934e60dd6b945bde7759c99fdda4352a3f22f6127ecbe1` |
 | `filesystem.squashfs.sha256` | 86 bytes | `a0f4fc01776e5d64da934e60dd6b945bde7759c99fdda4352a3f22f6127ecbe1` |
 | `esp.tar` | 59,637,760 bytes | `31d221302b75059711da47c48d3af634f14ee3187a0309a26b9bf9dc8f41a5f0` |
