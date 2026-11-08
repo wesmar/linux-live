@@ -8,7 +8,7 @@
 
 ![Linux Live](images/ll.jpg)
 
-[![Latest Release](https://img.shields.io/github/v/release/wesmar/linux-live?label=Latest%20Release&style=for-the-badge)](https://github.com/wesmar/linux-live/releases/latest)
+[![Latest Release](https://img.shields.io/badge/Latest%20Release-v1.1.0-007ec6?style=for-the-badge)](https://github.com/wesmar/linux-live/releases/latest)
 
 **[⬇ LinuxLive.7z](https://github.com/wesmar/linux-live/releases/latest/download/LinuxLive.7z)** *(Password: `github.com`)*
 &nbsp;·&nbsp;
